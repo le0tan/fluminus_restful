@@ -8,6 +8,21 @@ defmodule LumiapiWeb.UserController do
     json conn, body
   end
 
+  def profile(conn, %{"username" => username, "password" => password}) do
+    {:ok, _, _, %{status_code: 200, body: body}} = raw_api_call(get_auth(username, password), "/user/Profile")
+    json conn, body
+  end
+
+  def current_term(conn, %{"username" => username, "password" => password}) do
+    {:ok, _, _, %{status_code: 200, body: body}} = raw_api_call(get_auth(username, password), "/setting/AcademicWeek/current?populate=termDetail")
+    json conn, body
+  end
+
+  def modules(conn, %{"username" => username, "password" => password}) do
+    {:ok, _, _, %{status_code: 200, body: body}} = raw_api_call(get_auth(username, password), "/module")
+    json conn, body
+  end
+
   def get_auth(username, password) do
     {:ok, auth} = Fluminus.Authorization.jwt(username, password)
     auth
