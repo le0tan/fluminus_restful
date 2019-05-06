@@ -23,6 +23,12 @@ defmodule LumiapiWeb.UserController do
     json conn, body
   end
 
+  def announcements(conn, %{"username" => username, "password" => password, "id" => id}, archived \\ false) do
+    uri = "/announcement/#{if archived, do: "Archived", else: "NonArchived"}/#{id}?sortby=displayFrom%20ASC"
+    {:ok, _, _, %{status_code: 200, body: body}} = raw_api_call(get_auth(username, password), uri)
+    json conn, body
+  end
+
   def get_auth(username, password) do
     {:ok, auth} = Fluminus.Authorization.jwt(username, password)
     auth

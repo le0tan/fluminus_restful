@@ -28,5 +28,6 @@ defmodule LumiapiWeb.Router do
     get "/username/:username/password/:password/current_term", UserController, :current_term
     get "/username/:username/password/:password/modules", UserController, :modules
     get "/username/:username/password/:password/module", UserController, :modules
+    get "/username/:username/password/:password/announcements/:id", UserController, :announcements
   end
 end
