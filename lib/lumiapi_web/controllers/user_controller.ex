@@ -24,6 +24,24 @@ defmodule LumiapiWeb.UserController do
     json conn, body
   end
 
+  def getDirectoryChildren(conn, %{"username" => username, "password" => password, "parentID" => id}) do
+    uri = "/files/?ParentID=#{id}"
+    {:ok, _, _, %{status_code: 200, body: body}} = raw_api_call(get_auth(username, password), uri)
+    json conn, body
+  end
+
+  def getFileChildren(conn, %{"username" => username, "password" => password, "directoryID" => id, "allowUpload" => allowUpload}) do
+    uri = "/files/#{id}/file#{if allowUpload=="true", do: "?populate=Creator", else: ""}"
+    {:ok, _, _, %{status_code: 200, body: body}} = raw_api_call(get_auth(username, password), uri)
+    json conn, body
+  end
+
+  def getDownloadUrl(conn, %{"username" => username, "password" => password, "id" => id}) do
+    uri = "/files/file/#{id}/downloadurl"
+    {:ok, _, _, %{status_code: 200, body: body}} = raw_api_call(get_auth(username, password), uri)
+    json conn, body
+  end
+
   def test(conn, %{"path" => path}) do
     IO.puts(path)
     profile = "{\"id\":\"c3d0054d-391f-4a39-a9b3-a9af2009c4da\",\"userID\":\"e0261956\",\"expireDate\":\"2019-07-02T10:24:15.237+08:00\",\"userNameOriginal\":\"TAN YUANHONG\",\"userMatricNo\":\"A0177903X\",\"nickName\":\"\",\"officialEmail\":\"\",\"email\":\"e0261956@u.nus.edu\",\"displayPhoto\":true}"
